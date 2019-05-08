@@ -1,0 +1,1 @@
+Node v8 ([8-jessie](https://hub.docker.com/r/library/node/tags/8-jessie/)) Docker Image extended with BoxMLS infrastructure requirements.
