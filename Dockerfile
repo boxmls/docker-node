@@ -13,7 +13,10 @@ ENV       NODE_PORT 8080
 
 RUN       \
           apt-get update && \
-          apt-get install -y --force-yes sudo zip unzip
+          apt-get install -y sudo zip unzip htop curl
+
+RUN       \
+          apt-get clean
 
 RUN       \
           groupadd --gid=500 core && \
@@ -26,8 +29,13 @@ RUN       \
           mkdir -p /root/.ssh && \
           mkdir -p /etc/pki/tls/certs && \
           mkdir -p /etc/pki/tls/private && \
-          mkdir -p /home/core/.ssh && \
-          mkdir -p /home/core/.config
+          mkdir -p /home/core/.ssh
+
+RUN       \
+          mkdir -p /etc/boxmls && \
+          mkdir -p /var/boxmls && \
+          mkdir -p /var/log/boxmls && \
+          mkdir -p /opt/sources/boxmls
 
 RUN       \
           echo "127.0.0.1 localhost" >> /etc/hosts
