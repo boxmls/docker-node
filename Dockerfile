@@ -13,7 +13,7 @@ ENV       NODE_PORT 8080
 
 RUN       \
           apt-get update && \
-          apt-get install -y sudo zip unzip htop curl
+          apt-get install -y sudo zip unzip htop curl openssh-server
 
 RUN       \
           apt-get clean
