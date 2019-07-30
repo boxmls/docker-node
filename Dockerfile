@@ -1,10 +1,12 @@
 #################################################################
+## MyPropertyOffice/docker-debian
 ##
 ## @author potanin@UD
 #################################################################
 
 
-FROM          debian:7
+FROM          debian:9
+MAINTAINER    MyPropertyOffice "http://mypropertyoffice.com"
 USER          root
 
 ENV           DEBIAN_FRONTEND noninteractive
@@ -14,16 +16,8 @@ ENV           DOCKER_IMAGE mypropertyoffice/debian
 
 RUN           \
               apt-get update && \
-              apt-get install -y --force-yes apt-transport-https sudo nano apt-utils curl wget python build-essential 
-
-RUN           \
-              wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add - && \
-              echo "deb http://packages.elastic.co/elasticsearch/1.5/debian stable main" | sudo tee -a /etc/apt/sources.list && \
-              apt-get update
-
-RUN           \
-              apt-get install -y --force-yes openjdk-7-jre-headless && \
-              apt-get install -y --force-yes python-software-properties htop man unzip vim socat telnet git && \
+              apt-get install -y --force-yes apt-transport-https sudo nano apt-utils curl wget python build-essential && \
+              apt-get install -y --force-yes htop man unzip vim socat telnet git && \
               apt-get install -y --force-yes libpcre3-dev libcurl3 libcurl3-dev lsyncd monit && \
               apt-get clean all
 
@@ -58,4 +52,3 @@ WORKDIR       /home/core
 USER          core
 
 ENTRYPOINT    [ "/bin/bash", "/usr/bin/entrypoint.sh" ]
-
