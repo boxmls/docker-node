@@ -1,51 +1,61 @@
 #################################################################
-## Node v8 for BoxMLS services
 ##
-## @author peshkov@UDX
+## @author potanin@UD
 #################################################################
 
-FROM      node:8
 
-USER      root
+FROM          debian:7
+USER          root
 
-ENV       NODE_ENV production
-ENV       NODE_PORT 8080
+ENV           DEBIAN_FRONTEND noninteractive
+ENV           NODE_ENV production
+ENV           TERM xterm
+ENV           DOCKER_IMAGE mypropertyoffice/debian
 
-RUN       \
-          apt-get update && \
-          apt-get install -y sudo zip unzip htop curl openssh-server
+RUN           \
+              apt-get update && \
+              apt-get install -y --force-yes apt-transport-https sudo nano apt-utils curl wget python build-essential 
 
-RUN       \
-          apt-get clean
+RUN           \
+              wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add - && \
+              echo "deb http://packages.elastic.co/elasticsearch/1.5/debian stable main" | sudo tee -a /etc/apt/sources.list && \
+              apt-get update
 
-RUN       \
-          groupadd --gid=500 core && \
-          useradd --create-home --uid=500 --gid=500 --home-dir=/home/core core && \
-          echo core:vejufhpoohsdzzpm | /usr/sbin/chpasswd && \
-          usermod -a -G sudo core && \
-          yes | cp /root/.bashrc /home/core && \
-          chown -R core:core /home/core && \
-          echo "core ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-          mkdir -p /root/.ssh && \
-          mkdir -p /etc/pki/tls/certs && \
-          mkdir -p /etc/pki/tls/private && \
-          mkdir -p /home/core/.ssh
+RUN           \
+              apt-get install -y --force-yes openjdk-7-jre-headless && \
+              apt-get install -y --force-yes python-software-properties htop man unzip vim socat telnet git && \
+              apt-get install -y --force-yes libpcre3-dev libcurl3 libcurl3-dev lsyncd monit && \
+              apt-get clean all
 
-RUN       \
-          mkdir -p /etc/boxmls && \
-          mkdir -p /var/boxmls && \
-          mkdir -p /var/log/boxmls && \
-          mkdir -p /opt/sources/boxmls
+RUN           \
+              curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
+              apt-get install -y nodejs
 
-RUN       \
-          echo "127.0.0.1 localhost" >> /etc/hosts
+RUN           \
+              groupadd --gid=500 core && \
+              useradd --create-home --uid=500 --gid=500 --home-dir=/home/core core && \
+              echo core:mmoqmwnpipmrkho | /usr/sbin/chpasswd && \
+              usermod -a -G sudo core && \
+              yes | cp /root/.bashrc /home/core && \
+              chown -R core:core /home/core && \
+              echo "core ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+              mkdir -p /root/.ssh && \
+              mkdir -p /etc/pki/tls/certs && \
+              mkdir -p /etc/pki/tls/private && \
+              mkdir -p /home/core/.ssh && \
+              mkdir -p /home/core/.config
 
-RUN       \
-          NODE_ENV=production npm install --loglevel warn -g pm2 mocha should grunt-cli
+RUN           \
+              echo "127.0.0.1 localhost" >> /etc/hosts
 
-RUN       \
-          chsh -s /bin/bash core
+ADD           bin/entrypoint.sh /usr/bin/entrypoint.sh
 
-WORKDIR   /home/core
+RUN           \
+              chmod +x  /usr/bin/entrypoint.sh
 
-EXPOSE    8080
+WORKDIR       /home/core
+
+USER          core
+
+ENTRYPOINT    [ "/bin/bash", "/usr/bin/entrypoint.sh" ]
+
