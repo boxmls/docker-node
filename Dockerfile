@@ -36,6 +36,9 @@ RUN       \
           mkdir -p /var/boxmls && \
           mkdir -p /var/log/boxmls && \
           mkdir -p /opt/sources/boxmls
+          
+RUN       \
+          mkdir -p /etc/hosts
 
 RUN       \
           echo "127.0.0.1 localhost" >> /etc/hosts
