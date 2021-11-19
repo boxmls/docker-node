@@ -5,6 +5,8 @@ Docker Image extended with BoxMLS infrastructure requirements.
 - Install Node.js v8 with common runtime modules.
 - Create common directory structure for all service containers.
 
+The NPM version was hardcoded - 8.1.0. Latest version does not work with Node JS 8.
+
 To build locally, run:
 
 ```
