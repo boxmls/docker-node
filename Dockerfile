@@ -38,7 +38,7 @@ RUN       \
           mkdir -p /opt/sources/boxmls
           
 RUN       \
-          NODE_ENV=production npm install npm@8.1.0 --loglevel warn -g pm2 mocha should grunt-cli
+          NODE_ENV=production npm install npm@6.14.15 --loglevel warn -g pm2 mocha should grunt-cli
 
 RUN       \
           chsh -s /bin/bash core
